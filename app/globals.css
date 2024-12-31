@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --primary: #4754D6;
+  --secondary: #C287EB;
+  --dark: #2E2953;
+  --light: #F6F5F0;
+}
+
+html {
+  direction: rtl;
+}
+
+body {
+  background: var(--light);
+  color: var(--dark);
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--light);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--secondary);
+}
+
+/* Focus styles */
+*:focus {
+  outline: 2px solid var(--primary);
+  outline-offset: 2px;
+}
+
+/* Accessibility */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* RTL support for inputs */
+input[type="text"],
+input[type="email"],
+input[type="tel"] {
+  text-align: right;
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.5s ease-out forwards;
+}
+
+/* Custom container styles */
+.container {
+  width: 100%;
+  margin-right: auto;
+  margin-left: auto;
+  padding-right: 1rem;
+  padding-left: 1rem;
+}
+
+@media (min-width: 640px) {
+  .container {
+    max-width: 640px;
+  }
+}
+
+@media (min-width: 768px) {
+  .container {
+    max-width: 768px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .container {
+    max-width: 1024px;
+  }
+}
+
+@media (min-width: 1280px) {
+  .container {
+    max-width: 1280px;
+  }
+}
+
+/* Custom form styles */
+.form-input {
+  @apply mt-1 block w-full rounded-lg border border-gray-300 px-4 py-3 focus:border-primary focus:ring-primary transition-colors;
+}
+
+.form-label {
+  @apply block text-sm font-medium text-dark;
+}
+
+.btn-primary {
+  @apply bg-primary text-white px-8 py-3 rounded-xl hover:bg-secondary transition-colors transform hover:scale-105 duration-200;
+}
+
+.btn-secondary {
+  @apply text-primary hover:text-secondary transition-colors;
+} 
