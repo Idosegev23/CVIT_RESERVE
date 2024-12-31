@@ -2,6 +2,7 @@
 
 import { Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 import ReservistForm from '@/components/ReservistForm';
 import LanguageToggle from '@/components/LanguageToggle';
 
@@ -20,9 +21,11 @@ export default function Home() {
       <div className="relative container mx-auto px-4 py-8 md:py-12">
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
-          <img 
+          <Image 
             src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1735156794/MailLogo_jrcesy.png"
             alt={t('logoAlt')}
+            width={64}
+            height={48}
             className="h-12 md:h-16 transition-transform duration-300 hover:scale-105"
           />
           <LanguageToggle />
@@ -41,14 +44,18 @@ export default function Home() {
                 {t('description')}
               </p>
               <div className={`flex justify-center ${isRTL ? 'md:justify-end' : 'md:justify-start'} space-x-4 ${isRTL ? 'space-x-reverse' : ''}`}>
-                <img 
+                <Image 
                   src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732464729/1_i9skom.svg"
                   alt={t('decorationAlt')}
+                  width={32}
+                  height={32}
                   className="w-8 h-8 animate-float"
                 />
-                <img 
+                <Image 
                   src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732464730/3_dr3mew.svg"
                   alt={t('decorationAlt')}
+                  width={32}
+                  height={32}
                   className="w-8 h-8 animate-float delay-150"
                 />
               </div>
@@ -56,9 +63,11 @@ export default function Home() {
             <div className={`${isRTL ? 'order-1 md:order-2' : 'order-1'}`}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl transform rotate-6 scale-105" />
-                <img 
+                <Image 
                   src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732740917/%D7%AA%D7%9E%D7%95%D7%A0%D7%94_%D7%9C%D7%94%D7%93%D7%A8_hfxkhd.png"
                   alt={t('heroImageAlt')}
+                  width={600}
+                  height={400}
                   className="relative rounded-3xl shadow-2xl w-full transition-all duration-300 hover:shadow-primary/20"
                 />
               </div>

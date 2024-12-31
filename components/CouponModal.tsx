@@ -2,6 +2,7 @@
 
 import { Fragment, useState } from 'react';
 import { useTranslation } from 'react-i18next';
+import Image from 'next/image';
 import { Dialog, Transition } from '@headlessui/react';
 import { ClipboardDocumentIcon, EnvelopeIcon, CheckIcon } from '@heroicons/react/24/outline';
 
@@ -79,9 +80,11 @@ export default function CouponModal({ isOpen, onClose, couponCode, email }: Coup
             >
               <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 ${isRTL ? 'text-right' : 'text-left'} align-middle shadow-xl transition-all`}>
                 <div className="relative">
-                  <img 
+                  <Image 
                     src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732464729/1_i9skom.svg"
                     alt={t('decorationAlt')}
+                    width={32}
+                    height={32}
                     className={`absolute -top-4 ${isRTL ? '-right-4' : '-left-4'} w-8 h-8 opacity-50`}
                   />
                   <Dialog.Title
