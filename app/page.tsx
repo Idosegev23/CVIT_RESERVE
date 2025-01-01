@@ -22,11 +22,12 @@ export default function Home() {
         {/* Header */}
         <header className="flex justify-between items-center mb-8">
           <Image 
-            src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1735156794/MailLogo_jrcesy.png"
+            src="/Wlogo.svg"
             alt={t('logoAlt')}
-            width={64}
-            height={48}
-            className="h-12 md:h-16 transition-transform duration-300 hover:scale-105"
+            width={180}
+            height={60}
+            className="h-16 md:h-20 w-auto object-contain transition-transform duration-300 hover:scale-105"
+            priority
           />
           <LanguageToggle />
         </header>
@@ -35,40 +36,25 @@ export default function Home() {
           {/* Hero Section */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
             <div className={`${isRTL ? 'order-2 md:order-1' : 'order-2'} text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-dark mb-6 leading-tight">
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 leading-tight">
                 {t('title.part1')}
                 <br />
-                <span className="text-primary">{t('title.part2')}</span>
+                <span className="text-brown">{t('title.part2')}</span>
               </h1>
               <p className="text-lg md:text-xl text-dark/80 leading-relaxed mb-8">
                 {t('description')}
               </p>
-              <div className={`flex justify-center ${isRTL ? 'md:justify-end' : 'md:justify-start'} space-x-4 ${isRTL ? 'space-x-reverse' : ''}`}>
-                <Image 
-                  src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732464729/1_i9skom.svg"
-                  alt={t('decorationAlt')}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 animate-float"
-                />
-                <Image 
-                  src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732464730/3_dr3mew.svg"
-                  alt={t('decorationAlt')}
-                  width={32}
-                  height={32}
-                  className="w-8 h-8 animate-float delay-150"
-                />
-              </div>
             </div>
             <div className={`${isRTL ? 'order-1 md:order-2' : 'order-1'}`}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl transform rotate-6 scale-105" />
                 <Image 
-                  src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732740917/%D7%AA%D7%9E%D7%95%D7%A0%D7%94_%D7%9C%D7%94%D7%93%D7%A8_hfxkhd.png"
+                  src="/1.png"
                   alt={t('heroImageAlt')}
                   width={600}
                   height={400}
                   className="relative rounded-3xl shadow-2xl w-full transition-all duration-300 hover:shadow-primary/20"
+                  priority
                 />
               </div>
             </div>
@@ -77,7 +63,7 @@ export default function Home() {
           {/* Form Section */}
           <div className="relative max-w-4xl mx-auto">
             <div className="absolute inset-0 bg-gradient-conic from-primary/5 via-secondary/5 to-primary/5 rounded-3xl transform -rotate-3" />
-            <div className="absolute inset-0 bg-white/80 backdrop-blur-xl rounded-3xl shadow-xl" />
+            <div className="absolute inset-0 bg-light/80 backdrop-blur-xl rounded-3xl shadow-xl" />
             <div className="relative p-8 md:p-12">
               <Suspense fallback={
                 <div className="flex justify-center items-center h-64">

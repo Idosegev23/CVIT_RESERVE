@@ -78,10 +78,10 @@ export default function CouponModal({ isOpen, onClose, couponCode, email }: Coup
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 ${isRTL ? 'text-right' : 'text-left'} align-middle shadow-xl transition-all`}>
+              <Dialog.Panel className={`w-full max-w-md transform overflow-hidden rounded-2xl bg-light p-8 ${isRTL ? 'text-right' : 'text-left'} align-middle shadow-xl transition-all`}>
                 <div className="relative">
                   <Image 
-                    src="https://res.cloudinary.com/dsoh3yteb/image/upload/v1732464729/1_i9skom.svg"
+                    src="/1.png"
                     alt={t('decorationAlt')}
                     width={32}
                     height={32}
@@ -89,7 +89,7 @@ export default function CouponModal({ isOpen, onClose, couponCode, email }: Coup
                   />
                   <Dialog.Title
                     as="h3"
-                    className="text-2xl font-bold leading-6 text-dark mb-6"
+                    className="text-2xl font-bold leading-6 text-primary mb-6"
                   >
                     {t('modal.title')}
                   </Dialog.Title>
@@ -99,11 +99,11 @@ export default function CouponModal({ isOpen, onClose, couponCode, email }: Coup
                   <p className="text-lg text-dark/80 mb-4">
                     {t('modal.description')}
                   </p>
-                  <div className="mt-2 p-6 bg-light rounded-xl flex items-center justify-between">
+                  <div className="mt-2 p-6 bg-white/50 backdrop-blur-sm rounded-xl border border-primary/20 flex items-center justify-between">
                     <span className="font-mono text-2xl text-primary font-bold">{couponCode}</span>
                     <button
                       onClick={handleCopy}
-                      className={`text-primary hover:text-secondary transition-colors p-2 rounded-lg hover:bg-white/50 ${isCopied ? 'text-green-500' : ''}`}
+                      className={`text-primary hover:text-brown transition-colors p-2 rounded-lg hover:bg-light/50 ${isCopied ? 'text-accent' : ''}`}
                       aria-label={t('modal.copyButton')}
                     >
                       {isCopied ? (
@@ -120,8 +120,8 @@ export default function CouponModal({ isOpen, onClose, couponCode, email }: Coup
                     type="button"
                     disabled={isSending}
                     className={`inline-flex items-center px-4 py-2 text-base font-medium ${
-                      isEmailSent ? 'text-green-500' : 'text-primary'
-                    } hover:text-secondary transition-colors disabled:opacity-50`}
+                      isEmailSent ? 'text-accent' : 'text-primary'
+                    } hover:text-brown transition-colors disabled:opacity-50`}
                     onClick={handleSendEmail}
                   >
                     {isSending ? (
@@ -138,7 +138,7 @@ export default function CouponModal({ isOpen, onClose, couponCode, email }: Coup
                   </button>
                   <button
                     type="button"
-                    className="inline-flex justify-center rounded-xl border border-transparent bg-primary px-6 py-3 text-base font-medium text-white hover:bg-secondary focus:outline-none transition-colors"
+                    className="inline-flex justify-center rounded-xl border border-transparent bg-primary px-6 py-3 text-base font-medium text-white hover:bg-brown focus:outline-none transition-colors"
                     onClick={onClose}
                   >
                     {t('modal.closeButton')}

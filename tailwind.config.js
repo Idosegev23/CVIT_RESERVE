@@ -8,17 +8,19 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: '#4754D6',
-        secondary: '#C287EB',
-        dark: '#2E2953',
-        light: '#F6F5F0',
+        primary: '#627956',
+        secondary: '#B0B586',
+        accent: '#AFC089',
+        brown: '#99754B',
+        light: '#E6D7B3',
+        dark: '#2D2D2D',
       },
       fontFamily: {
         sans: ['var(--font-inter)'],
       },
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
-        'gradient-conic': 'conic-gradient(var(--tw-gradient-stops))',
+        'gradient-conic': 'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       animation: {
         float: 'float 3s ease-in-out infinite',
