@@ -35,8 +35,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-            {/* Image Section - First on mobile, switches sides on desktop */}
-            <div className={`order-1 ${isRTL ? 'md:order-2' : 'md:order-1'} ${isRTL ? 'md:col-start-2' : ''}`}>
+            {/* Image Section - First on mobile */}
+            <div className={`order-1 ${isRTL ? 'md:col-start-2' : 'md:col-start-1'}`}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl transform rotate-6 scale-105" />
                 <Image 
@@ -49,8 +49,8 @@ export default function Home() {
                 />
               </div>
             </div>
-            {/* Text Section - Second on mobile, switches sides on desktop */}
-            <div className={`order-2 ${isRTL ? 'md:order-1' : 'md:order-2'} ${isRTL ? 'md:col-start-1' : ''} text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
+            {/* Text Section - Second on mobile */}
+            <div className={`order-2 ${isRTL ? 'md:col-start-1' : 'md:col-start-2'} text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
               <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 leading-tight">
                 {t('title.part1')}
                 <br />
