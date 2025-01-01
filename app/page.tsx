@@ -11,11 +11,11 @@ export default function Home() {
   const isRTL = i18n.dir() === 'rtl';
 
   return (
-    <main className="min-h-screen bg-gradient-radial from-light via-white to-light overflow-hidden">
+    <main className="min-h-screen bg-gradient-radial from-light via-white to-light overflow-hidden" dir={isRTL ? 'rtl' : 'ltr'}>
       {/* Background Decorations */}
       <div className="fixed inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-1/4 -right-1/4 w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl" />
-        <div className="absolute -bottom-1/4 -left-1/4 w-1/2 h-1/2 bg-secondary/5 rounded-full blur-3xl" />
+        <div className={`absolute -top-1/4 ${isRTL ? '-left-1/4' : '-right-1/4'} w-1/2 h-1/2 bg-primary/5 rounded-full blur-3xl`} />
+        <div className={`absolute -bottom-1/4 ${isRTL ? '-right-1/4' : '-left-1/4'} w-1/2 h-1/2 bg-secondary/5 rounded-full blur-3xl`} />
       </div>
 
       <div className="relative container mx-auto px-4 py-8 md:py-12">
@@ -35,17 +35,8 @@ export default function Home() {
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
           <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-            <div className={`${isRTL ? 'order-2 md:order-1' : 'order-2'} text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 leading-tight">
-                {t('title.part1')}
-                <br />
-                <span className="text-brown">{t('title.part2')}</span>
-              </h1>
-              <p className="text-lg md:text-xl text-dark/80 leading-relaxed mb-8">
-                {t('description')}
-              </p>
-            </div>
-            <div className={`${isRTL ? 'order-1 md:order-2' : 'order-1'}`}>
+            {/* Image Section - First on mobile, switches sides on desktop */}
+            <div className={`order-1 ${isRTL ? 'md:order-2' : 'md:order-1'} ${isRTL ? 'md:col-start-2' : ''}`}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl transform rotate-6 scale-105" />
                 <Image 
@@ -57,6 +48,17 @@ export default function Home() {
                   priority
                 />
               </div>
+            </div>
+            {/* Text Section - Second on mobile, switches sides on desktop */}
+            <div className={`order-2 ${isRTL ? 'md:order-1' : 'md:order-2'} ${isRTL ? 'md:col-start-1' : ''} text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 leading-tight">
+                {t('title.part1')}
+                <br />
+                <span className="text-brown">{t('title.part2')}</span>
+              </h1>
+              <p className="text-lg md:text-xl text-dark/80 leading-relaxed mb-8">
+                {t('description')}
+              </p>
             </div>
           </div>
 
