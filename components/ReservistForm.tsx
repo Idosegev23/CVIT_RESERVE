@@ -21,7 +21,6 @@ export default function ReservistForm() {
     Phone: '',
     Email: '',
   });
-  const [couponCode, setCouponCode] = useState('');
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -32,72 +31,25 @@ export default function ReservistForm() {
     setIsLoading(true);
 
     try {
-      console.log('Fetching available coupon...');
-      
-      // בדיקה פשוטה - נביא קופון אחד לבדיקה
-      const { data, error } = await supabase
-        .from('reservist_coupons')
-        .select('*')
-        .limit(1);
-
-      console.log('Query response:', { data, error });
-
-      if (error) {
-        console.error('Error fetching coupons:', error);
-        setError(t('form.error.general'));
-        return;
-      }
-
-      if (!data || data.length === 0) {
-        console.error('No coupons found in the table');
-        setError('לא נמצאו קופונים במערכת');
-        return;
-      }
-
-      // נמצא קופון פנוי
-      const { data: availableCoupons, error: unusedError } = await supabase
-        .from('reservist_coupons')
-        .select('*')
-        .is('FirstName', null)
-        .limit(1);
-
-      console.log('Available coupons:', availableCoupons);
-
-      if (unusedError) {
-        console.error('Error fetching available coupons:', unusedError);
-        setError(t('form.error.general'));
-        return;
-      }
-
-      if (!availableCoupons || availableCoupons.length === 0) {
-        console.error('No available coupons found');
-        setError('לא נמצאו קופונים פנויים במערכת');
-        return;
-      }
-
-      const availableCoupon = availableCoupons[0];
-      console.log('Found available coupon:', availableCoupon);
-
-      // Update the coupon with user details
+      // שמירת פרטי המשתמש בדאטאבייס
       const { error: updateError } = await supabase
         .from('reservist_coupons')
-        .update({
+        .insert({
           FirstName: formData.FirstName,
           LastName: formData.LastName,
           Phone: formData.Phone,
           Email: formData.Email,
+          code: 'reserve',
+          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
-        })
-        .eq('id', availableCoupon.id)
-        .select();
+        });
 
       if (updateError) {
-        console.error('Error updating coupon:', updateError);
+        console.error('Error saving user details:', updateError);
         setError(t('form.error.general'));
         return;
       }
 
-      setCouponCode(availableCoupon.code);
       setIsModalOpen(true);
     } catch (err) {
       console.error('Unexpected error:', err);
@@ -200,7 +152,7 @@ export default function ReservistForm() {
       <CouponModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        couponCode={couponCode}
+        couponCode="reserve"
         email={formData.Email}
       />
     </div>
