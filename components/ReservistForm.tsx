@@ -10,9 +10,6 @@ const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
 
-// בדיקת חיבור לסופאבייס
-console.log('Connecting to Supabase...');
-
 export default function ReservistForm() {
   const { t } = useTranslation();
   const [formData, setFormData] = useState({
@@ -31,21 +28,19 @@ export default function ReservistForm() {
     setIsLoading(true);
 
     try {
-      // שמירת פרטי המשתמש בדאטאבייס
-      const { error: updateError } = await supabase
+      // שמירת פרטי המשתמש בטבלת reservist_coupons
+      const { error: insertError } = await supabase
         .from('reservist_coupons')
         .insert({
           FirstName: formData.FirstName,
           LastName: formData.LastName,
           Phone: formData.Phone,
           Email: formData.Email,
-          code: 'reserve',
-          created_at: new Date().toISOString(),
           updated_at: new Date().toISOString()
         });
 
-      if (updateError) {
-        console.error('Error saving user details:', updateError);
+      if (insertError) {
+        console.error('Error saving user details:', insertError);
         setError(t('form.error.general'));
         return;
       }
