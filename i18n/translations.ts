@@ -10,9 +10,13 @@ export const translations = {
       lastName: 'שם משפחה',
       phone: 'טלפון',
       email: 'דוא"ל',
+      certificate: 'העלאת אישור מילואים',
+      certificateHelp: 'נא להעלות צילום ברור של אישור המילואים שלך. האישור חייב להיות קריא ולכלול את שמך המלא ומספר ימי המילואים.',
       submit: 'קבל את הקוד שלך',
       error: {
-        noCoupons: 'לצערנו לא נותרו קופונים זמינים',
+        noCertificate: 'נא להעלות אישור מילואים',
+        uploadFailed: 'שגיאה בהעלאת הקובץ',
+        invalidCertificate: 'אישור המילואים לא תקין או לא תואם לפרטים שהוזנו',
         general: 'אירעה שגיאה בעת עיבוד הבקשה'
       }
     },
@@ -40,9 +44,13 @@ export const translations = {
       lastName: 'Last Name',
       phone: 'Phone',
       email: 'Email',
+      certificate: 'Upload Military Service Certificate',
+      certificateHelp: 'Please upload a clear photo of your military service certificate. The certificate must be legible and include your full name and number of service days.',
       submit: 'Get Your Code',
       error: {
-        noCoupons: 'Unfortunately, no coupons are available',
+        noCertificate: 'Please upload a military service certificate',
+        uploadFailed: 'Failed to upload file',
+        invalidCertificate: 'Invalid certificate or details do not match',
         general: 'An error occurred while processing your request'
       }
     },

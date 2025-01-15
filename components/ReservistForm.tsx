@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createClient } from '@supabase/supabase-js';
 import CouponModal from '@/components/CouponModal';
+import { v4 as uuidv4 } from 'uuid';
 
 const supabase = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL!,
@@ -18,9 +19,42 @@ export default function ReservistForm() {
     Phone: '',
     Email: '',
   });
+  const [certificateFile, setCertificateFile] = useState<File | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [couponCode, setCouponCode] = useState('');
+
+  const generateCouponCode = () => {
+    // יצירת קוד קופון אקראי בפורמט XXXX-XXXX-XXXX
+    return `${uuidv4().slice(0, 4)}-${uuidv4().slice(0, 4)}-${uuidv4().slice(0, 4)}`.toUpperCase();
+  };
+
+  const verifyMilitaryCertificate = async (imageUrl: string) => {
+    try {
+      const response = await fetch('/api/verify-certificate', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          imageUrl,
+          firstName: formData.FirstName,
+          lastName: formData.LastName,
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to verify certificate');
+      }
+
+      const data = await response.json();
+      return data;
+    } catch (error) {
+      console.error('Error verifying certificate:', error);
+      throw error;
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -28,6 +62,41 @@ export default function ReservistForm() {
     setIsLoading(true);
 
     try {
+      if (!certificateFile) {
+        setError(t('form.error.noCertificate'));
+        return;
+      }
+
+      // העלאת הקובץ לסופאבייס
+      const fileExt = certificateFile.name.split('.').pop();
+      const fileName = `${uuidv4()}.${fileExt}`;
+      const { data: fileData, error: uploadError } = await supabase.storage
+        .from('reserve')
+        .upload(fileName, certificateFile);
+
+      if (uploadError) {
+        console.error('Error uploading file:', uploadError);
+        setError(t('form.error.uploadFailed'));
+        return;
+      }
+
+      // קבלת URL לקובץ
+      const { data: { publicUrl } } = supabase.storage
+        .from('reserve')
+        .getPublicUrl(fileName);
+
+      // אימות התעודה
+      const verificationResult = await verifyMilitaryCertificate(publicUrl);
+      
+      if (!verificationResult.isValid) {
+        setError(t('form.error.invalidCertificate'));
+        return;
+      }
+
+      // יצירת קוד קופון
+      const newCouponCode = generateCouponCode();
+      setCouponCode(newCouponCode);
+
       // שמירת פרטי המשתמש בטבלת reservist_coupons
       const { error: insertError } = await supabase
         .from('reservist_coupons')
@@ -36,6 +105,11 @@ export default function ReservistForm() {
           LastName: formData.LastName,
           Phone: formData.Phone,
           Email: formData.Email,
+          coupon_code: newCouponCode,
+          military_certificate_url: publicUrl,
+          is_verified: true,
+          military_days: verificationResult.militaryDays,
+          verification_date: new Date().toISOString(),
           updated_at: new Date().toISOString()
         });
 
@@ -115,6 +189,23 @@ export default function ReservistForm() {
               onChange={(e) => setFormData({ ...formData, Email: e.target.value })}
             />
           </div>
+
+          <div className="space-y-2 md:col-span-2">
+            <label htmlFor="certificate" className="block text-sm font-medium text-dark">
+              {t('form.certificate')}
+            </label>
+            <input
+              type="file"
+              id="certificate"
+              required
+              accept="image/*,.pdf"
+              className="form-input w-full"
+              onChange={(e) => setCertificateFile(e.target.files?.[0] || null)}
+            />
+            <p className="text-sm text-gray-500 mt-1">
+              {t('form.certificateHelp')}
+            </p>
+          </div>
         </div>
 
         {error && (
@@ -147,7 +238,7 @@ export default function ReservistForm() {
       <CouponModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
-        couponCode="reserve"
+        couponCode={couponCode}
         email={formData.Email}
       />
     </div>
