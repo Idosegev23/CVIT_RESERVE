@@ -1,13 +1,19 @@
 import { NextResponse } from 'next/server';
 import Anthropic from '@anthropic-ai/sdk';
 
-if (!process.env.ANTHROPIC_API_KEY) {
-  throw new Error('ANTHROPIC_API_KEY is not defined in environment variables');
-}
-
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });
+
+const SUPPORTED_FORMATS = ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'application/pdf'] as const;
+type SupportedFormat = typeof SUPPORTED_FORMATS[number];
+
+function validateMediaType(contentType: string | null): SupportedFormat {
+  if (!contentType || !SUPPORTED_FORMATS.includes(contentType as SupportedFormat)) {
+    throw new Error(`Invalid file format. Supported formats: ${SUPPORTED_FORMATS.join(', ')}`);
+  }
+  return contentType as SupportedFormat;
+}
 
 export async function POST(request: Request) {
   try {
@@ -17,26 +23,50 @@ export async function POST(request: Request) {
     const { imageUrl, firstName, lastName } = await request.json();
     console.log('Received request:', { imageUrl, firstName, lastName });
 
-    // קבלת תוכן התמונה כ-base64
-    console.log('Fetching image from URL...');
-    const imageResponse = await fetch(imageUrl);
-    if (!imageResponse.ok) {
-      console.error('Failed to fetch image:', imageResponse.statusText);
-      throw new Error('Failed to fetch image');
+    // קבלת תוכן הקובץ
+    console.log('Fetching file...');
+    const fileResponse = await fetch(imageUrl);
+    if (!fileResponse.ok) {
+      console.error('Failed to fetch file:', fileResponse.statusText);
+      throw new Error('Failed to fetch file');
     }
 
-    const imageBuffer = await imageResponse.arrayBuffer();
-    const base64Image = Buffer.from(imageBuffer).toString('base64');
-    console.log('Image converted to base64');
+    const contentType = validateMediaType(fileResponse.headers.get('content-type'));
+    console.log('File content type:', contentType);
 
-    // שליחת התמונה ל-Claude Vision
+    const fileBuffer = await fileResponse.arrayBuffer();
+    const base64Data = Buffer.from(fileBuffer).toString('base64');
+    console.log('File size (bytes):', fileBuffer.byteLength);
+
+    if (fileBuffer.byteLength > 32 * 1024 * 1024) { // 32MB limit
+      throw new Error('File size exceeds 32MB limit');
+    }
+
+    // שליחת הקובץ ל-Claude Vision
     console.log('Sending request to Claude Vision...');
     const message = await anthropic.messages.create({
-      model: "claude-3-sonnet-20240229",
+      model: "claude-3-5-sonnet-20241022",
       max_tokens: 1024,
       messages: [{
         role: "user",
         content: [
+          contentType === 'application/pdf' 
+            ? {
+                type: "document",
+                source: {
+                  type: "base64",
+                  media_type: "application/pdf",
+                  data: base64Data
+                }
+              }
+            : {
+                type: "image",
+                source: {
+                  type: "base64",
+                  media_type: contentType,
+                  data: base64Data
+                }
+              },
           {
             type: "text",
             text: `אנא בדוק את תעודת המילואים הזו ואמת את הפרטים הבאים:
@@ -44,20 +74,12 @@ export async function POST(request: Request) {
             2. כמה ימי מילואים מופיעים בתעודה?
             3. האם התעודה נראית אותנטית?
             
-            אנא החזר תשובה בפורמט JSON עם השדות הבאים:
+            חשוב: אנא החזר אך ורק אובייקט JSON בפורמט הבא, ללא טקסט נוסף לפני או אחרי:
             {
               isValid: boolean, // האם התעודה תקינה והשם תואם
               militaryDays: number, // מספר ימי המילואים
-              reason: string // סיבה אם לא תקין
+              reason: string // סיבה אם לא תקין, או string ריק אם תקין
             }`
-          },
-          {
-            type: "image",
-            source: {
-              type: "base64",
-              media_type: "image/jpeg",
-              data: base64Image
-            }
           }
         ]
       }]
@@ -97,7 +119,8 @@ export async function POST(request: Request) {
     return NextResponse.json(
       { 
         error: 'Failed to verify certificate',
-        details: error instanceof Error ? error.message : 'Unknown error'
+        details: error instanceof Error ? error.message : 'Unknown error',
+        ...(error instanceof Error && error.cause ? { cause: error.cause } : {})
       },
       { status: 500 }
     );
