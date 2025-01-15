@@ -2,13 +2,43 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+  --primary: #4754D6;
+  --secondary: #C287EB;
+  --dark: #2E2953;
+  --light: #F6F5F0;
+}
+
+/* RTL Support */
+[dir="rtl"] .flex-row {
+  flex-direction: row-reverse;
+}
+
+[dir="rtl"] .text-right {
+  text-align: left;
+}
+
+[dir="rtl"] .text-left {
+  text-align: right;
+}
+
+@layer base {
+  body {
+    @apply bg-light text-dark;
+  }
+  
+  h1, h2, h3, h4, h5, h6 {
+    @apply text-primary;
+  }
+}
+
 @layer components {
   .form-input {
     @apply w-full px-4 py-3 rounded-xl border border-primary/20 bg-white/50 backdrop-blur-sm focus:border-primary focus:ring-2 focus:ring-primary/20 transition-colors;
   }
 
   .btn-primary {
-    @apply px-8 py-3 bg-primary text-white rounded-xl hover:bg-brown focus:ring-4 focus:ring-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply px-8 py-3 bg-primary text-white rounded-xl hover:bg-secondary focus:ring-4 focus:ring-primary/20 transition-all disabled:opacity-50 disabled:cursor-not-allowed;
   }
 }
 

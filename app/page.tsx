@@ -20,7 +20,7 @@ export default function Home() {
 
       <div className="relative container mx-auto px-4 py-8 md:py-12">
         {/* Header */}
-        <header className="flex justify-between items-center mb-8">
+        <header className="flex flex-row justify-between items-center mb-8">
           <Image 
             src="/Wlogo.svg"
             alt={t('logoAlt')}
@@ -34,9 +34,9 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto">
           {/* Hero Section */}
-          <div className="grid md:grid-cols-2 gap-12 items-center mb-16">
-            {/* Image Section - First on mobile */}
-            <div className={`order-1 ${isRTL ? 'md:col-start-2' : 'md:col-start-1'}`}>
+          <div className="flex flex-col md:flex-row gap-12 items-center mb-16">
+            {/* Image Section */}
+            <div className={`w-full md:w-1/2 ${isRTL ? 'md:order-2' : 'md:order-1'}`}>
               <div className="relative">
                 <div className="absolute inset-0 bg-gradient-to-tr from-primary/20 to-secondary/20 rounded-3xl transform rotate-6 scale-105" />
                 <Image 
@@ -49,12 +49,12 @@ export default function Home() {
                 />
               </div>
             </div>
-            {/* Text Section - Second on mobile */}
-            <div className={`order-2 ${isRTL ? 'md:col-start-1' : 'md:col-start-2'} text-center ${isRTL ? 'md:text-right' : 'md:text-left'}`}>
-              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold text-primary mb-6 leading-tight">
-                {t('title.part1')}
+            {/* Text Section */}
+            <div className={`w-full md:w-1/2 ${isRTL ? 'md:order-1' : 'md:order-2'} ${isRTL ? 'text-right' : 'text-left'}`}>
+              <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold mb-6 leading-tight">
+                <span className="text-primary">{t('title.part1')}</span>
                 <br />
-                <span className="text-brown">{t('title.part2')}</span>
+                <span className="text-secondary">{t('title.part2')}</span>
               </h1>
               <p className="text-lg md:text-xl text-dark/80 leading-relaxed mb-8">
                 {t('description')}
@@ -68,7 +68,7 @@ export default function Home() {
             <div className="absolute inset-0 bg-light/80 backdrop-blur-xl rounded-3xl shadow-xl" />
             <div className="relative p-8 md:p-12">
               <Suspense fallback={
-                <div className="flex justify-center items-center h-64">
+                <div className="flex flex-row justify-center items-center h-64">
                   <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
                 </div>
               }>
